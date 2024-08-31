@@ -30,6 +30,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.calculatetip.ui.theme.CalculateTipTheme
+import java.util.Locale
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,9 +81,11 @@ fun TipLayout() {
             )
 
             Text(
-                text = stringResource(R.string.tip_amount, String.format("%.2f", tipAmount.doubleValue)),
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.displaySmall
+                text = stringResource(
+                    R.string.tip_amount, String.format(
+                        Locale("en", "US"), "%.2f", tipAmount.doubleValue
+                    )
+                ), fontWeight = FontWeight.Bold, style = MaterialTheme.typography.displaySmall
             )
 
             Spacer(modifier = Modifier.height(150.dp))
