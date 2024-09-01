@@ -1,5 +1,6 @@
 package com.example.calculatetip
 
+import android.media.Image
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -7,15 +8,19 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -25,8 +30,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -72,21 +79,26 @@ fun TipLayout() {
             )
 
             InputField(
-                value = billAmount.value,
-                onValueChange = {
+                icon = ImageVector.vectorResource(id = R.drawable.baseline_money_24),
+                value = billAmount.value, onValueChange = {
                     billAmount.value = it
-                },
-                label = stringResource(R.string.bill_amount)
+                }, label = stringResource(R.string.bill_amount)
             )
 
+            Spacer(modifier = Modifier.height(16.dp))
+
             InputField(
-                value = tipPercentage.value,
-                onValueChange = {
+                icon = ImageVector.vectorResource(id = R.drawable.baseline_percent_24),
+                value = tipPercentage.value, onValueChange = {
                     tipPercentage.value = it
-                    tipAmount.doubleValue = calculateTip(billAmount.value.toDoubleOrNull() ?: 0.0, tipPercentage.value.toIntOrNull() ?: 15)
-                },
-                label = "Tip Percentage"
+                    tipAmount.doubleValue = calculateTip(
+                        billAmount.value.toDoubleOrNull() ?: 0.0,
+                        tipPercentage.value.toIntOrNull() ?: 15
+                    )
+                }, label = stringResource(id = R.string.tip_percentage)
             )
+
+            Spacer(modifier = Modifier.height(16.dp))
 
             Text(
                 text = stringResource(
@@ -106,6 +118,7 @@ fun InputField(
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
+    icon: ImageVector? = null,
     imeAction: ImeAction = ImeAction.Done,
     keyboardType: KeyboardType = KeyboardType.Number
 ) {
@@ -114,20 +127,31 @@ fun InputField(
     TextField(
         value = value,
         onValueChange = onValueChange,
-        label = { Text(text = label) },
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 16.dp),
+        label = {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start,
+            ) {
+                Icon(
+                    imageVector = icon
+                        ?: ImageVector.vectorResource(id = R.drawable.ic_launcher_foreground),
+                    contentDescription = null,
+                    modifier = Modifier.size(28.dp)
+                )
+
+                Spacer(modifier = Modifier.width(16.dp))
+
+                Text(text = label)
+            }
+        },
+        modifier = Modifier.fillMaxWidth(),
         singleLine = true,
         keyboardOptions = KeyboardOptions.Default.copy(
-            keyboardType = keyboardType,
-            imeAction = imeAction
+            keyboardType = keyboardType, imeAction = imeAction
         ),
-        keyboardActions = KeyboardActions(
-            onDone = {
-                keyboardController?.hide()
-            }
-        )
+        keyboardActions = KeyboardActions(onDone = {
+            keyboardController?.hide()
+        })
     )
 }
 
