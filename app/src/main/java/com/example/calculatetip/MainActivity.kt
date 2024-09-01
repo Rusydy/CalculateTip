@@ -103,6 +103,7 @@ fun BillAmountInput(
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 16.dp),
+        singleLine = true,
         keyboardOptions = KeyboardOptions.Default.copy(
             keyboardType = KeyboardType.Number, imeAction = ImeAction.Done
         ),
