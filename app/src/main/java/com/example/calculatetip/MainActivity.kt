@@ -22,6 +22,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -59,6 +60,7 @@ fun TipLayout() {
     val billAmount = remember { mutableStateOf("") }
     val tipAmount = remember { mutableDoubleStateOf(0.00) }
     val tipPercentage = remember { mutableStateOf("") }
+    val roundUp = remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
@@ -97,6 +99,27 @@ fun TipLayout() {
                     )
                 }, label = stringResource(id = R.string.tip_percentage)
             )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = stringResource(R.string.round_up_tip))
+                Switch(
+                    checked = roundUp.value,
+                    onCheckedChange = {
+                        roundUp.value = it
+                        tipAmount.doubleValue = calculateTip(
+                            billAmount.value.toDoubleOrNull() ?: 0.0,
+                            tipPercentage.value.toIntOrNull() ?: 15,
+                            roundUp.value
+                        )
+                    }
+                )
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -155,8 +178,9 @@ fun InputField(
     )
 }
 
-fun calculateTip(billAmount: Double, tipPercentage: Int = 15): Double {
-    return billAmount * tipPercentage / 100
+fun calculateTip(billAmount: Double, tipPercentage: Int = 15, roundUp: Boolean = false): Double {
+    val tip = billAmount * tipPercentage / 100
+    return if (roundUp) kotlin.math.ceil(tip) else tip
 }
 
 @Preview(showBackground = true, showSystemUi = true)
