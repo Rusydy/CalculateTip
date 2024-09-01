@@ -51,8 +51,6 @@ class MainActivity : ComponentActivity() {
 fun TipLayout() {
     val billAmount = remember { mutableStateOf("") }
     val tipAmount = remember { mutableDoubleStateOf(0.00) }
-    val keyboardController = LocalSoftwareKeyboardController.current
-
     Box(
         modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
     ) {
@@ -71,23 +69,12 @@ fun TipLayout() {
                     .align(alignment = Alignment.Start)
             )
 
-            TextField(
-                value = billAmount.value,
-                onValueChange = {
+            BillAmountInput(
+                billAmount = billAmount.value,
+                onBillAmountChange = {
                     billAmount.value = it
-                    tipAmount.doubleValue = calculateTip(billAmount.value.toDouble())
+                    tipAmount.doubleValue = calculateTip(it.toDoubleOrNull() ?: 0.00)
                 },
-                label = { Text(text = stringResource(R.string.bill_amount)) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp),
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Done
-                ),
-                keyboardActions = KeyboardActions(
-                    onDone = { keyboardController?.hide() }
-                )
             )
 
             Text(
@@ -101,6 +88,27 @@ fun TipLayout() {
             Spacer(modifier = Modifier.height(150.dp))
         }
     }
+}
+
+@Composable
+fun BillAmountInput(
+    billAmount: String,
+    onBillAmountChange: (String) -> Unit,
+) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    TextField(value = billAmount,
+        onValueChange = onBillAmountChange,
+        label = { Text(text = stringResource(R.string.bill_amount)) },
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 16.dp),
+        keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardType = KeyboardType.Number, imeAction = ImeAction.Done
+        ),
+        keyboardActions = KeyboardActions(onDone = {
+            keyboardController?.hide()
+        }))
 }
 
 // calculate tip by multiplying bill amount by 0.15
