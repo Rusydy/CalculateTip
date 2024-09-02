@@ -186,7 +186,11 @@ fun InputField(
 }
 
 @VisibleForTesting
-internal fun calculateTip(billAmount: Double, tipPercentage: Int = 15, roundUp: Boolean = false): Double {
+internal fun calculateTip(
+    billAmount: Double,
+    tipPercentage: Int = 15,
+    roundUp: Boolean = false
+): Double {
     val tip = billAmount * tipPercentage / 100
     return if (roundUp) kotlin.math.ceil(tip) else tip
 }
