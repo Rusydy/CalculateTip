@@ -85,6 +85,11 @@ fun TipLayout() {
                 value = billAmount.value,
                 onValueChange = {
                     billAmount.value = it
+                    tipAmount.doubleValue = calculateTip(
+                        billAmount.value.toDoubleOrNull() ?: 0.0,
+                        tipPercentage.value.toIntOrNull() ?: 15,
+                        roundUp.value
+                    )
                 },
                 label = stringResource(R.string.bill_amount)
             )
@@ -98,7 +103,8 @@ fun TipLayout() {
                     tipPercentage.value = it
                     tipAmount.doubleValue = calculateTip(
                         billAmount.value.toDoubleOrNull() ?: 0.0,
-                        tipPercentage.value.toIntOrNull() ?: 15
+                        tipPercentage.value.toIntOrNull() ?: 15,
+                        roundUp.value
                     )
                 },
                 label = stringResource(id = R.string.tip_percentage)
@@ -187,7 +193,7 @@ internal fun calculateTip(billAmount: Double, tipPercentage: Int = 15, roundUp: 
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun GreetingPreview() {
+fun CalculateTipPreview() {
     CalculateTipTheme {
         TipLayout()
     }
