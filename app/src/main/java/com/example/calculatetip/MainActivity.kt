@@ -1,6 +1,5 @@
 package com.example.calculatetip
 
-import android.media.Image
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -82,22 +81,26 @@ fun TipLayout() {
 
             InputField(
                 icon = ImageVector.vectorResource(id = R.drawable.baseline_money_24),
-                value = billAmount.value, onValueChange = {
+                value = billAmount.value,
+                onValueChange = {
                     billAmount.value = it
-                }, label = stringResource(R.string.bill_amount)
+                },
+                label = stringResource(R.string.bill_amount)
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             InputField(
                 icon = ImageVector.vectorResource(id = R.drawable.baseline_percent_24),
-                value = tipPercentage.value, onValueChange = {
+                value = tipPercentage.value,
+                onValueChange = {
                     tipPercentage.value = it
                     tipAmount.doubleValue = calculateTip(
                         billAmount.value.toDoubleOrNull() ?: 0.0,
                         tipPercentage.value.toIntOrNull() ?: 15
                     )
-                }, label = stringResource(id = R.string.tip_percentage)
+                },
+                label = stringResource(id = R.string.tip_percentage)
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -108,17 +111,14 @@ fun TipLayout() {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(text = stringResource(R.string.round_up_tip))
-                Switch(
-                    checked = roundUp.value,
-                    onCheckedChange = {
-                        roundUp.value = it
-                        tipAmount.doubleValue = calculateTip(
-                            billAmount.value.toDoubleOrNull() ?: 0.0,
-                            tipPercentage.value.toIntOrNull() ?: 15,
-                            roundUp.value
-                        )
-                    }
-                )
+                Switch(checked = roundUp.value, onCheckedChange = {
+                    roundUp.value = it
+                    tipAmount.doubleValue = calculateTip(
+                        billAmount.value.toDoubleOrNull() ?: 0.0,
+                        tipPercentage.value.toIntOrNull() ?: 15,
+                        roundUp.value
+                    )
+                })
             }
 
             Spacer(modifier = Modifier.height(16.dp))
