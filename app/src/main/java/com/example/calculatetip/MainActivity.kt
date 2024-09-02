@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -178,7 +179,8 @@ fun InputField(
     )
 }
 
-fun calculateTip(billAmount: Double, tipPercentage: Int = 15, roundUp: Boolean = false): Double {
+@VisibleForTesting
+internal fun calculateTip(billAmount: Double, tipPercentage: Int = 15, roundUp: Boolean = false): Double {
     val tip = billAmount * tipPercentage / 100
     return if (roundUp) kotlin.math.ceil(tip) else tip
 }
