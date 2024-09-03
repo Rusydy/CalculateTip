@@ -35,6 +35,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -125,6 +127,8 @@ fun TipLayout() {
                         tipPercentage.value.toIntOrNull() ?: 15,
                         roundUp.value
                     )
+                }, modifier = Modifier.semantics {
+                    contentDescription = "Round Up Tip Switch"
                 })
             }
 
@@ -187,9 +191,7 @@ fun InputField(
 
 @VisibleForTesting
 internal fun calculateTip(
-    billAmount: Double,
-    tipPercentage: Int = 15,
-    roundUp: Boolean = false
+    billAmount: Double, tipPercentage: Int = 15, roundUp: Boolean = false
 ): Double {
     val tip = billAmount * tipPercentage / 100
     return if (roundUp) kotlin.math.ceil(tip) else tip
